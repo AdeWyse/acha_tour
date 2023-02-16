@@ -1,17 +1,18 @@
-import {initializeApp} from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore} from "firebase/firestore";
-
+import firebase from "@react-native-firebase/app";
+import firestore from "@react-native-firebase/firestore";
+import auth from '@react-native-firebase/auth';
 const firebaseConfig = {
-    apiKey: "AIzaSyBLjXF03ak55tkfWZKIWi0_gJcQaq1kELE",
-    authDomain: "achatour.firebaseapp.com",
-    projectId: "achatour",
-    storageBucket: "achatour.appsopt.com",
-    messagingSenderId: "189855578119",
-    appId: "1:189855578119:web:27faa4f737096fef1bd2a2",
-    measurementId: "G-VQ3BXWP188"
+    clientId:'189855578119-a71vkgcr95qekpnmcunqv0spl540gpf0.apps.googleusercontent.com',
+    appId: '1:189855578119:android:b953303c98cc21d91bd2a2',
+    apiKey: 'AIzaSyAgWn_QPr1BTT0QhqqvEuhWSBy7v5p17Yk',
+    storageBucket: 'achatour.appspot.com',
+    projectId: 'achatour',
 };
+var app = "passed";
+if(!firebase.apps.length){
+ app = firebase.initializeApp(firebaseConfig);
+}else{
+    app = firebase.apps[0];
+}
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
-export const database = getFirestore(app);
+export const negocio = firestore().collection('Negocio');

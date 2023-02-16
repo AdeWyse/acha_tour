@@ -6,16 +6,12 @@ import GetLocation from "react-native-get-location";
 import BottomNavigation from "../global/BottomNavigation";
 import{colors, parameters} from "../global/styles";
 import { GetNegocios } from "../dao/negocioDao";
-
 export default function Busca({navigation, route}){
     const [locationIn, setLocation] = useState({latitude: -23.6807245, longitude: -47.1696191, latitudeDelta: 0.09, longitudeDelta: 0.04});
     const [lugares, setLugares] = useState([]);
 
-    GetNegocios().then(function(ret){
-        console.log(ret);
-}).catch(function(error){console.log("Promisse FALHA")});
-
-
+     var negociosGet =  GetNegocios();
+     setLugares(negociosGet);
     useEffect(() => {
         let unmounted = false;
         const requestLocation = async () => {            

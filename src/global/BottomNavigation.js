@@ -2,9 +2,9 @@ import React from "react";
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import{colors, parameters} from "../global/styles";
 import { Icon } from "@rneui/themed";
-import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
 
 
 
@@ -22,14 +22,14 @@ export default function BottomNavigation({navigator}){
     })
   }
 
-  onAuthStateChanged(auth, (user) => {
+  /*onAuthStateChanged(auth, (user) => {
     if(user){
       const userId = user.uid
      
     }else{
         //navigator.navigate('Entrar');
     }
-  })
+  })*/
 
     return (
         <View style={styles.navigationBar}>
