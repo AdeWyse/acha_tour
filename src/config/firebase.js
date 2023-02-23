@@ -1,6 +1,9 @@
 import firebase from "@react-native-firebase/app";
 import firestore from "@react-native-firebase/firestore";
 import auth from '@react-native-firebase/auth';
+
+import Geocoder from "react-native-geocoding";
+
 const firebaseConfig = {
     clientId:'189855578119-a71vkgcr95qekpnmcunqv0spl540gpf0.apps.googleusercontent.com',
     appId: '1:189855578119:android:b953303c98cc21d91bd2a2',
@@ -16,3 +19,6 @@ if(!firebase.apps.length){
 }
 
 export const negocio = firestore().collection('Negocio');
+export const usuario = firestore().collection('Usuario');
+
+Geocoder.init("AIzaSyAeinITGakkYS2Yj4Ktue--Jyaj_WYcuFw");

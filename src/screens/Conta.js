@@ -1,22 +1,43 @@
-import React from "react";
+import React, { useEffect, useState, useContext  } from "react";
+import { UserContext } from "../../App";
 import {View, Text, StyleSheet, Dimensions, TextInput, Pressable, ScrollView, Image} from 'react-native';
 import BottomNavigation from "../global/BottomNavigation";
 import{colors, parameters} from "../global/styles";
-import{auth} from '../config/firebase';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Icon } from "@rneui/themed";
+import { getUser } from "../dao/usuarioDao";
 
 
 
-export default function Feed({navigation, route}){
-   // const user = auth.currentUser;
+export default function Conta({navigation, route}){
+    const [user, setUser] = useState({});
+    const userId = useContext(UserContext);
 
+    useEffect(() => {
+        let unmounted = false;
+
+            const use = async () => {
+                try{
+                    const use = await getUser(userId).then(usuario => {
+                        setUser(usuario);
+                    })
+                }catch(err){
+                    console.log("ERRO!" + err);
+                }
+            }
+             use();
+            return () => {
+                unmounted = true;
+            }
+    }, []);
+
+   
    const GoReview = () => {
 
    }
 
    const GoMeusNegocios = () => {
-    
+        navigation.navigate('Meus Negócios')
    }
 
    const GoMinhaLista = () => {
@@ -27,8 +48,8 @@ export default function Feed({navigation, route}){
         <View style={{width: '100%', padding: 0, margin: 0}}>
                 <ScrollView style={styles.container} >
                 <View style={styles.identification}>
-                    <Image style={styles.identificationImage} source={{uri:'https://i.pinimg.com/originals/6b/85/6e/6b856e0f737d516bc7fa7488e2ad0c79.jpg'}}></Image>
-                            <Text style={styles.identificationText}>Jane Doe</Text>
+                    <Image style={styles.identificationImage} source={{uri:user.foto}}></Image>
+                            <Text style={styles.identificationText}>{user.nome}</Text>
                     </View>
                     <View style={styles.areaChoice}>
                         <Pressable onPress={GoReview} style={[styles.areaChoiceButtons, {backgroundColor: colors.yellow}]}>

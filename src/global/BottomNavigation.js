@@ -2,9 +2,7 @@ import React from "react";
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import{colors, parameters} from "../global/styles";
 import { Icon } from "@rneui/themed";
-import { signOut } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../config/firebase";
+import auth from '@react-native-firebase/auth';
 
 
 
@@ -13,8 +11,8 @@ import { auth } from "../config/firebase";
 export default function BottomNavigation({navigator}){
 
   const handleLogout= () => {
-    signOut(auth).then(()=>{
-        //Success
+    auth().signOut().then(()=>{
+        navigator.navigate('Entrar')
     }).catch((error)=>{
         const errorCode = error.code;
             const errorMessage = error.message;
@@ -22,14 +20,11 @@ export default function BottomNavigation({navigator}){
     })
   }
 
-  /*onAuthStateChanged(auth, (user) => {
-    if(user){
-      const userId = user.uid
-     
-    }else{
-        //navigator.navigate('Entrar');
+  auth().onAuthStateChanged((user) => {
+    if(!user){
+        navigation.navigate('Entrar');
     }
-  })*/
+  })
 
     return (
         <View style={styles.navigationBar}>

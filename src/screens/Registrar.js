@@ -4,8 +4,8 @@ import{colors, parameters} from "../global/styles";
 import {useForm, Controller} from "react-hook-form";
 import * as yup from 'yup';
 import{yupResolver} from '@hookform/resolvers/yup';
-import {auth} from '../config/firebase';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from '@react-native-firebase/auth';
+import { setUser } from "../dao/usuarioDao";
 
 
 const schema = yup.object({
@@ -26,13 +26,21 @@ export default function Registrar({navigation, route}){
     function handleRegistro(data){
         var email = data.email;
         var senha = data.senha;
-        createUserWithEmailAndPassword(auth, email, senha).then((userCredential) => {
-            const user = userCredential.user;
-            console.log(auth);
+        auth().createUserWithEmailAndPassword(email, senha).then((userCredential) => {
+            usuarioToCreate = {
+                id: userCredential.id,
+                nome: data.nome,
+                foto: ''
+            }
+            navigation.navigate('Feed');
+
+            
+            setUser(usuarioToCreate);
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage);
+
         })
     }
 

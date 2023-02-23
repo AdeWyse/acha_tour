@@ -4,9 +4,7 @@ import{colors, parameters} from "../global/styles";
 import {useForm, Controller} from "react-hook-form";
 import * as yup from 'yup';
 import{yupResolver} from '@hookform/resolvers/yup';
-import {auth} from '../config/firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-
+import auth from '@react-native-firebase/auth';
 
 const schema = yup.object({
     email: yup.string().email("Email Inválido").required("Informe um email"),
@@ -24,8 +22,10 @@ export default function Entrar({navigation, route}){
         var senha = data.senha;
         setLogin(true);
 
-        signInWithEmailAndPassword(auth, email, senha).then((userCredential) => {
-            const user = userCredential.user;
+        auth().signInWithEmailAndPassword(email, senha).then((userCredential) => {
+            navigation.navigate('Feed');
+
+            //Create user on DB
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -34,14 +34,7 @@ export default function Entrar({navigation, route}){
         })
     };
 
-    onAuthStateChanged(auth, (user) => {
-        if(user){
-          const userId = user.uid
-          navigation.navigate('Feed');
-        }else{
-            navigation.navigate('Entrar');
-        }
-      })
+
 
     return (
         <View>

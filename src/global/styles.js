@@ -8,6 +8,7 @@ export const colors = {
     blue: '#004DFF',
     purple: "#750787", //Spirit
     white: '#FFFFFF',
+    offWhite: '#F3F5F6',
     pink: '#FFAFC8',
     lightBlue: '#74d7EE',
     brown: '#613915',

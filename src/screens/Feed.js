@@ -2,7 +2,6 @@ import React from "react";
 import {View, Text, StyleSheet, Dimensions, TextInput, Pressable, ScrollView} from 'react-native';
 import BottomNavigation from "../global/BottomNavigation";
 import{colors, parameters} from "../global/styles";
-import { db } from "../config/firebase";
 
 
 
