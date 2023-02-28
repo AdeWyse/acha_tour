@@ -7,35 +7,36 @@ import * as yup from 'yup';
 import{yupResolver} from '@hookform/resolvers/yup';
 import { getUser } from "../dao/usuarioDao";
 import Geocoder from "react-native-geocoding";
-import { setNegocio } from "../dao/negocioDao";
+import { getNegocio, editNegocio } from "../dao/negocioDao";
 import { firebase } from "@react-native-firebase/auth";
 
-const schema = yup.object({
-    nome: yup.string().required("Informe um nome"),
-    tipo: yup.string().required("Informe um tipo"),
-    descricao: yup.string().required("Informe uma descrição"),
-    rua:  yup.string().required("Informe uma rua"),
-    numero: yup.string().required("Informe um numero"),
-    cep: yup.string().required("Informe um cep"),
-    telefone: yup.string().required("Informe um telefone"),
-    
 
 
-})
+
+export default function EditarNegocio({navigation, route}){
 
 
-export default function AdicionarNegocio({navigation, route}){
-
-
-    const {control, handleSubmit, formState: {errors}} = useForm({resolver: yupResolver(schema)});
+ 
 
     const [user, setUser] = useState({});
     const userId = useContext(UserContext);
+
+    const [negocioOriginal , setNegocioOriginal] = useState({});
+    const [endereco, setEndereco] = useState({});
 
 
     useEffect(() => {
         let unmounted = false;
 
+        const neg = async () => {
+            try{
+                const negocio = await getNegocio(route.params.id).then(neg => {
+                    setNegocioOriginal(neg);
+                })
+            }catch(err){
+                console.log("ERRO!" + err);
+            }
+        }
             const use = async () => {
                 try{
                     const use = await getUser(userId).then(usuario => {
@@ -46,6 +47,7 @@ export default function AdicionarNegocio({navigation, route}){
                 }
             }
              use();
+             neg();
             return () => {
                 unmounted = true;
             }
@@ -55,49 +57,45 @@ export default function AdicionarNegocio({navigation, route}){
 
     function handleNegocio(data){
 
-        var telefoneCheio = data.telefone;
-        var telefoneLimpo = "";
-        console.log(telefoneCheio);
-        for(var i = 0; i < telefoneCheio.length; i++){
+        var tempData = data;
+        if(data.telefone != undefined){
+            var telefoneCheio = data.telefone;
+            var telefoneLimpo = "";
+            console.log(telefoneCheio);
+            for(var i = 0; i < telefoneCheio.length; i++){
             if((telefoneCheio.charAt(i)<50 || telefoneCheio.charAt(i)>57)){
                 telefoneLimpo = telefoneLimpo + telefoneCheio.charAt(i);
             }
-        }
 
+            tempData.telefone = telefoneLimpo;
+        }
+        }
+        
         var loc = {}
-        try{
-            Geocoder.from(data.rua + "," + data.numero + "," + data.cep).then(json => {
-                loc = json.results[0].geometry.location;
-                var novoNegocio = {
-                    nome: data.nome,
-                    tipo: data.tipo,
-                    descricao: data.descricao,
-                    social: data.link,
-                    telefone: telefoneLimpo,
-                    location: new firebase.firestore.GeoPoint(Number(loc.lat), Number(loc.lng)),
-                    rua: data.rua,
-                    numero: datanumero,
-                    cep: data.cep,
-                    responsavel: user.id,
-                    notaGeral: 5,
-                    notaSeguranca: 5,
-                    notaPreco: 5,
-                    status: "analise"
-                }
-                setNegocio(novoNegocio);
-                navigation.navigate('Meus Negócios');
-            }).catch(error => console.warn("Erro Add: " + error))
-        }catch(err){
-            console.log("ERRO! AddNegocio " + err);
-        }
-     
 
+
+        if(data.rua != undefined && data.numero != undefined && data.cep != undefined){
+            try{
+                Geocoder.from(data.rua + "," + data.numero + "," + data.cep).then(json => {
+                    loc = json.results[0].geometry.location;
+                }).catch(error => console.warn("Erro Add: " + error))
+            }catch(err){
+                console.log("ERRO! EditNegocio " + err);
+            }
+            tempData['location'] = loc
+        }
+
+        Object.keys(tempData).forEach(key => tempData[key] === undefined ? delete tempData[key] : {})
+        editNegocio(tempData, route.params.id);
+        navigation.navigate('Negocio', {id: route.params.id});
     }
+
+    const {control, handleSubmit, formState: {errors}} = useForm({});
 
     return (
         <View>
             <ScrollView style={styles.container}>
-                    <Text style={styles.welcomeText}>Novo Negócio</Text>
+                    <Text style={styles.welcomeText}>Editar Negócio</Text>
 
                     <Controller 
                         control={control}
@@ -105,7 +103,7 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Nome</Text>
-                                <TextInput style={[styles.inputs, errors.nome && styles.erroBorder]} placeholder="Nome" value={value} onChangeText={onChange}></TextInput>
+                                <TextInput style={[styles.inputs, errors.nome && styles.erroBorder]} placeholder={negocioOriginal.nome} value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />
@@ -116,7 +114,7 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Tipo</Text>
-                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.tipo && styles.erroBorder]} placeholder="Ex. Restaurante, Bar, Loja de Roupas" value={value} onChangeText={onChange}></TextInput>
+                        <TextInput style={[styles.inputs, errors.tipo && styles.erroBorder]} placeholder={negocioOriginal.tipo} value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />
@@ -126,7 +124,7 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Descricao</Text>
-                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.descricao && styles.erroBorder]} placeholder="Descrição" value={value} onChangeText={onChange}></TextInput>
+                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.descricao && styles.erroBorder]} placeholder={negocioOriginal.descricao} value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />
@@ -136,7 +134,7 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Rua</Text>
-                                <TextInput style={[styles.inputs, errors.rua && styles.erroBorder]} placeholder="Rua" value={value}  onChangeText={onChange}></TextInput>
+                                <TextInput style={[styles.inputs, errors.rua && styles.erroBorder]} placeholder={negocioOriginal.rua} value={value}  onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />  
@@ -148,7 +146,7 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Numero</Text>
-                    <TextInput style={[styles.inputs, errors.numero && styles.erroBorder]} placeholder="Número" value={value} onChangeText={onChange}></TextInput>
+                    <TextInput style={[styles.inputs, errors.numero && styles.erroBorder]} placeholder={negocioOriginal.numero} value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />
@@ -159,18 +157,18 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Cep</Text>
-                    <TextInput style={[styles.inputs, errors.cep && styles.erroBorder]} placeholder=" Cep: xxxxxxxx" value={value} onChangeText={onChange}></TextInput>
+                    <TextInput style={[styles.inputs, errors.cep && styles.erroBorder]} placeholder={negocioOriginal.cep} value={value} onChangeText={onChange}></TextInput>
                             </View>
-                        )}
+    )}
                     />
                     {errors.cep && <Text style={styles.erro}>{errors.cep?.message}</Text>}
                     <Controller 
                         control={control}
-                        name="link"
+                        name="social"
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Link</Text>
-                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.link && styles.erroBorder]} placeholder="Link do seu site ou rede social oficial" value={value} onChangeText={onChange}></TextInput>
+                        <TextInput style={[styles.inputs, errors.telefone && styles.erroBorder]} placeholder={negocioOriginal.social} value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />
@@ -180,11 +178,11 @@ export default function AdicionarNegocio({navigation, route}){
                         render={({ field: {onChange, value}}) => (
                             <View>
                                 <Text style={styles.prompts}>Telefone</Text>
-                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.telefone && styles.erroBorder]} placeholder="Telefone: (xx)xxxxxxxxx" value={value} onChangeText={onChange}></TextInput>
+                        <TextInput style={[styles.inputs, errors.telefone && styles.erroBorder]} placeholder={negocioOriginal.telefone} value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />
-                    <Pressable style={styles.entrarButton} onPress={handleSubmit(handleNegocio)}><Text style={{color: colors.white, fontWeight: 'bold'}}>Registrar</Text></Pressable>
+                    <Pressable style={styles.entrarButton} onPress={handleSubmit(handleNegocio)}><Text style={{color: colors.white, fontWeight: 'bold'}}>Editar</Text></Pressable>
             </ScrollView>
         </View>
     )

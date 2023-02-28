@@ -7,11 +7,15 @@ import Conta from "./src/screens/Conta";
 import Busca from "./src/screens/Busca";
 import Negocio from "./src/screens/Negocio";
 import MeusNegocios from "./src/screens/MeusNegocios";
+import MinhasReviews from "./src/screens/MinhasReviews";
 import AdicionarNegocio from "./src/screens/AdicionarNegocio";
+import AdicionarReview from "./src/screens/AdicionarReview";
+import EditarReview from "./src/screens/EditarReview";
 import{colors, parameters} from "./src/global/styles";
 import { NavigationContainer, StackRouter } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import auth from '@react-native-firebase/auth';
+import EditarNegocio from "./src/screens/EditarNegocio";
 
 
 const Stack = createNativeStackNavigator();
@@ -39,14 +43,22 @@ export default function App(){
                 backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
             <Stack.Screen name='Conta' component={Conta} options={{headerStyle: {
                 backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}}} />
+            <Stack.Screen name='Nova Review' component={AdicionarReview} options={{headerStyle: {
+                backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
             <Stack.Screen name='Feed' component={Feed} options={{headerStyle: {
                 backgroundColor: colors.purple, }, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerBackButtonMenuEnabled: 'false'}}/>
               <Stack.Screen name='Registrar' component={Registrar} options={{headerStyle: {
                 backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
+              <Stack.Screen name='Minhas Reviews' component={MinhasReviews} options={{headerStyle: {
+                backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.purple}, headerTintColor: 'white'}}/>
               <Stack.Screen name='Meus Negócios' component={MeusNegocios} options={{headerStyle: {
-                backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
+                backgroundColor: colors.orange}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
             <Stack.Screen name='Novo Negócio' component={AdicionarNegocio} options={{headerStyle: {
-                backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}}} /> 
+                backgroundColor: colors.green}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}}} /> 
+            <Stack.Screen name='Editar Negócio' component={EditarNegocio} options={{headerStyle: {
+            backgroundColor: colors.green}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}}} /> 
+            <Stack.Screen name='Editar Review' component={EditarReview} options={{headerStyle: {
+            backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.purple}}} /> 
             </Stack.Navigator>
             </View>
           </NavigationContainer>

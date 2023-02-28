@@ -23,7 +23,6 @@ export async function getUser(id){
 
     return usuarioLocalizado
 }
-
 export function setUser(user){
 
     usuario.doc(user.id).set({nome: user.nome, foto: user.foto}).then(() => {

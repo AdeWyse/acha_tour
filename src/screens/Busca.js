@@ -44,7 +44,6 @@ export default function Busca({navigation, route}){
                     const negocio = await getNegocios().then(neg => {
                         setLugares(neg);
                         setLugaresOriginal(neg);
-
                     }
                         
                     )
@@ -60,14 +59,12 @@ export default function Busca({navigation, route}){
     }, []);
     
     const busca = (input) => {
-        console.log(input);
         if(!lugaresTabStatus){
             setLugaresTabStatus(!lugaresTabStatus);
         }
         setBuscaInput(input);
         var result = [];
         lugaresOriginal.forEach((lugar) => {
-            console.log(lugar.nome)
             if(lugar.nome.includes(input)){
                 result.push(lugar);
             }

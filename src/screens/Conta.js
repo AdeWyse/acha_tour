@@ -33,8 +33,8 @@ export default function Conta({navigation, route}){
 
    
    const GoReview = () => {
-
-   }
+    navigation.navigate('Minhas Reviews')
+   }    
 
    const GoMeusNegocios = () => {
         navigation.navigate('Meus Negócios')

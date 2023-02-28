@@ -22,7 +22,7 @@ export default function BottomNavigation({navigator}){
 
   auth().onAuthStateChanged((user) => {
     if(!user){
-        navigation.navigate('Entrar');
+        navigator.navigate('Entrar');
     }
   })
 

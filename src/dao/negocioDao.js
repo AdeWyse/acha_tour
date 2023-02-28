@@ -24,6 +24,9 @@ export  const getNegocios = async () =>  {
                 negocioTemplate = {
                     id: documentSnapshot.id,
                     location: loc,
+                    rua: documentSnapshot.data().rua,
+                    numero: documentSnapshot.data().numero,
+                    cep: documentSnapshot.data().cep,
                     descricao: documentSnapshot.data().descricao,
                     tipo: documentSnapshot.data().tipo,
                     nome: documentSnapshot.data().nome,
@@ -34,7 +37,6 @@ export  const getNegocios = async () =>  {
                     social: documentSnapshot.data().social,
                     telefone: documentSnapshot.data().telefone
                 }
-            console.log(negocioTemplate)
 
                 negocios.push(negocioTemplate);
             })
@@ -51,10 +53,13 @@ export async function getNegocio(id){
     var negocioLocalizado
    await negocio.doc(id).get().then(documentSnapshot => {
         if(documentSnapshot.exists){
-            const loc = { latitude: documentSnapshot.data().location.latitude , longitude: documentSnapshot.data().longitude}
+            const loc = { latitude: documentSnapshot.data().location.latitude , longitude: documentSnapshot.data().location.longitude}
             negocioLocalizado = {
                 id: documentSnapshot.id,
                 location: loc,
+                rua: documentSnapshot.data().rua,
+                numero: documentSnapshot.data().numero,
+                cep: documentSnapshot.data().cep,
                 descricao: documentSnapshot.data().descricao,
                 tipo: documentSnapshot.data().tipo,
                 nome: documentSnapshot.data().nome,
@@ -64,13 +69,53 @@ export async function getNegocio(id){
                 responsavel:documentSnapshot.data().responsavel,
                 social: documentSnapshot.data().social,
                 telefone: documentSnapshot.data().telefone
+
             }
+
         }else{
             negocioLocalizado = "Não encontrado";
         }
     })
 
     return negocioLocalizado
+}
+
+export  const getNegociosUsuario = async (id) =>  {
+    var negocios = [];
+    try {
+        
+        await negocio.where('responsavel', '==', id).get().then(querySnapshot => {
+
+            querySnapshot.forEach(documentSnapshot => {
+                
+                const loc = { latitude: documentSnapshot.data().location.latitude , longitude: documentSnapshot.data().location.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01}
+
+                negocioTemplate = {
+                    id: documentSnapshot.id,
+                    location: loc,
+                    rua: documentSnapshot.data().rua,
+                    numero: documentSnapshot.data().numero,
+                    cep: documentSnapshot.data().cep,
+                    descricao: documentSnapshot.data().descricao,
+                    tipo: documentSnapshot.data().tipo,
+                    nome: documentSnapshot.data().nome,
+                    notaGeral: documentSnapshot.data().notaGeral,
+                    notaPreco: documentSnapshot.data().notaPreco,
+                    notaSeguranca: documentSnapshot.data().notaSeguranca,
+                    responsavel:documentSnapshot.data().responsavel,
+                    social: documentSnapshot.data().social,
+                    telefone: documentSnapshot.data().telefone
+                }
+
+                negocios.push(negocioTemplate);
+            })
+            return negocios
+    })
+    }catch(err){
+                console.log("ERRO!" + err);
+            }
+   
+    return negocios
 }
 
 export function setNegocio(neg){
@@ -80,6 +125,8 @@ export function setNegocio(neg){
     
 }
 
-export function EditNegocio(id, location, nome, notaGeral, notaPreco, notaSeguranca, responsavel, social, telefone){
-    
+export function editNegocio(neg, id){
+    negocio.doc(id).update(neg).then(() => {
+        console.log("Negócio Editado")
+    })
 }
