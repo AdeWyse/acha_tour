@@ -3,78 +3,70 @@ import { UserContext } from "../../App";
 import {View, Text, StyleSheet, Dimensions, TextInput, Pressable, ScrollView} from 'react-native';
 import BottomNavigation from "../global/BottomNavigation";
 import{colors, parameters} from "../global/styles";
-import { getUser } from "../dao/usuarioDao";
-import { getNegociosUsuario } from "../dao/negocioDao";
+import { getUserWishlist } from "../dao/usuarioDao";
+import { getNegociosWishlist} from "../dao/negocioDao";
 
 
-export default function MeusNegocios({navigation, route}){
-    const [user, setUser] = useState({});
+export default function Wishlist({navigation, route}){
     const userId = useContext(UserContext);
-
+    const [wishlistIds, setWishlistIds] = useState([]);
     const [meusNegocios, setMeusNegocios] = useState([]);
+    var count = 0;
     useEffect(() => {
         let unmounted = false;
-
-        
             const use = async () => {
                 try{
-                    const use = await getUser(userId).then(usuario => {
-                        setUser(usuario);
+                    const use = await getUserWishlist(userId, count, wishlistIds).then(usuario => {
+                        setWishlistIds(usuario);
                     })
                 }catch(err){
-                    console.log("ERRO! MeusNegocios " + err);
+                    console.log("ERRO! Wishlist " + err);
                 }
             }
-
             const neg = async () => {
                 try{
-                    const negocio = await getNegociosUsuario(userId).then(neg => {
-                        setMeusNegocios(neg);
+                    const negocio = await getNegociosWishlist(wishlistIds,count, meusNegocios).then(negoc => {
+                         setMeusNegocios(negoc);
+                    });
 
-                    }
-                        
-                    )
                 }catch(err){
-                    console.log("ERRO! MeusNegocios " + err);
+                    console.log("ERRO! Meus lugares " + err);
                 }
             }
              use();
-             neg();
+           neg();
             return () => {
                 unmounted = true;
             }
-    }, []);
+    }, [wishlistIds]);
 
-    const cardsLugares = meusNegocios.map(lugar =>
-        <Pressable onPress ={() => {
-            navigation.navigate('Negocio', {id: lugar.id})
-    }}>
-            <View style={styles.lugar} >
+    
+        const cardsLugares = meusNegocios.map(lugar => (
+            <Pressable onPress ={() => {
+                navigation.navigate('Negocio', {id: lugar?.id})
+            }}>
+             <View style={styles.lugar} >
             <View  style={styles.lugarTop}>
-                <Text style={styles.lugarTitulo}>{lugar.nome}</Text>
-                <Text style={styles.lugarTipo}>{lugar.publico}</Text>
-                <Text style={styles.lugarTipo}>{lugar.tipo}</Text>
+                <Text style={styles.lugarTitulo}>{lugar?.nome}</Text>
+                <Text style={styles.lugarTipo}>{lugar?.publico}</Text>
+                <Text style={styles.lugarTipo}>{lugar?.tipo}</Text>
             </View>
             <View style={styles.lugarNotas}>
-                <Text style={styles.lugarNota}>Nota - {lugar.notaGeral}</Text>
-                <Text style={styles.lugarNota}>Segurança - {lugar.notaSeguranca}</Text>
-                <Text style={styles.lugarNota}>Preço - {lugar.notaSeguranca}</Text>
+                <Text style={styles.lugarNota}>Nota - {lugar?.notaGeral}</Text>
+                <Text style={styles.lugarNota}>Segurança - {lugar?.notaSeguranca}</Text>
+                <Text style={styles.lugarNota}>Preço - {lugar?.notaSeguranca}</Text>
             </View>
-            <Text  style={styles.lugarDescricao}>{lugar.descricao}</Text>
+            <Text  style={styles.lugarDescricao}>{lugar?.descricao}</Text>
         </View>
-        </Pressable>
-        
-        );
+            </Pressable>
+        ));
+
+
 
     return (
         <View>
             <ScrollView style={styles.container}>
                 <View style={styles.containerInside}>
-                    <View style={styles.menu} >
-                        <Pressable style={styles.novoNegocio} onPress={()=>{
-                                navigation.navigate('Novo Negócio');
-                            }}><Text style={styles.novoNegocioText}>Novo Negócio</Text></Pressable>
-                    </View>
                     <View style={styles.negocios}>
                             {cardsLugares}
                     </View>

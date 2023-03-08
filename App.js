@@ -16,6 +16,9 @@ import { NavigationContainer, StackRouter } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import auth from '@react-native-firebase/auth';
 import EditarNegocio from "./src/screens/EditarNegocio";
+import Help from "./src/screens/Help";
+import AdicionarServicos from "./src/screens/AdicionarServicos";
+import Wishlist from "./src/screens/Wishlist";
 
 
 const Stack = createNativeStackNavigator();
@@ -44,9 +47,9 @@ export default function App(){
             <Stack.Screen name='Conta' component={Conta} options={{headerStyle: {
                 backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}}} />
             <Stack.Screen name='Nova Review' component={AdicionarReview} options={{headerStyle: {
-                backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
-            <Stack.Screen name='Feed' component={Feed} options={{headerStyle: {
-                backgroundColor: colors.purple, }, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerBackButtonMenuEnabled: 'false'}}/>
+                backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.purple}, headerTintColor: 'white'}}/>
+            <Stack.Screen name='Ajuda' component={Help} options={{headerStyle: {
+                backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
               <Stack.Screen name='Registrar' component={Registrar} options={{headerStyle: {
                 backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}, headerTintColor: 'white'}}/>
               <Stack.Screen name='Minhas Reviews' component={MinhasReviews} options={{headerStyle: {
@@ -58,7 +61,11 @@ export default function App(){
             <Stack.Screen name='Editar Negócio' component={EditarNegocio} options={{headerStyle: {
             backgroundColor: colors.green}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: 'white'}}} /> 
             <Stack.Screen name='Editar Review' component={EditarReview} options={{headerStyle: {
-            backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.purple}}} /> 
+            backgroundColor: colors.yellow}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.purple}}} />
+            <Stack.Screen name='Adicionar Serviços' component={AdicionarServicos} options={{headerStyle: {
+            backgroundColor: colors.lightBlue}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.black}}} /> 
+            <Stack.Screen name='Wishlist' component={Wishlist} options={{headerStyle: {
+            backgroundColor: colors.purple}, headerShadowVisible: false, headerTitleStyle: { fontWeight: 'bold', color: colors.white}}} /> 
             </Stack.Navigator>
             </View>
           </NavigationContainer>

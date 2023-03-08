@@ -28,6 +28,7 @@ export  const getNegocios = async () =>  {
                     numero: documentSnapshot.data().numero,
                     cep: documentSnapshot.data().cep,
                     descricao: documentSnapshot.data().descricao,
+                    publico: documentSnapshot.data().publico,
                     tipo: documentSnapshot.data().tipo,
                     nome: documentSnapshot.data().nome,
                     notaGeral: documentSnapshot.data().notaGeral,
@@ -54,6 +55,17 @@ export async function getNegocio(id){
    await negocio.doc(id).get().then(documentSnapshot => {
         if(documentSnapshot.exists){
             const loc = { latitude: documentSnapshot.data().location.latitude , longitude: documentSnapshot.data().location.longitude}
+            var servicos = [];
+            Object.keys(documentSnapshot.data()).forEach(key => {
+                if(key.includes("servico")){
+                    var endString = key.substring(key.indexOf(' ') + 1)
+                    var precokey = "preco"
+                    if(!endString.includes("servico")){
+                     precokey = "preco "+endString
+                    }
+                    servicos.push({nome: documentSnapshot.data()[key], preco: documentSnapshot.data()[precokey]});
+                }
+            })
             negocioLocalizado = {
                 id: documentSnapshot.id,
                 location: loc,
@@ -61,6 +73,7 @@ export async function getNegocio(id){
                 numero: documentSnapshot.data().numero,
                 cep: documentSnapshot.data().cep,
                 descricao: documentSnapshot.data().descricao,
+                publico: documentSnapshot.data().publico,
                 tipo: documentSnapshot.data().tipo,
                 nome: documentSnapshot.data().nome,
                 notaGeral: documentSnapshot.data().notaGeral,
@@ -68,10 +81,9 @@ export async function getNegocio(id){
                 notaSeguranca: documentSnapshot.data().notaSeguranca,
                 responsavel:documentSnapshot.data().responsavel,
                 social: documentSnapshot.data().social,
-                telefone: documentSnapshot.data().telefone
-
+                telefone: documentSnapshot.data().telefone,
+                servico: servicos
             }
-
         }else{
             negocioLocalizado = "Não encontrado";
         }
@@ -80,7 +92,27 @@ export async function getNegocio(id){
     return negocioLocalizado
 }
 
-export  const getNegociosUsuario = async (id) =>  {
+export async function getNegociosWishlist(ids, count, negocioIn)  {
+    if(count <= 1){
+            var negocios = [];
+        for(var i = 0; i < ids.length; i++){
+            try{
+                await getNegocio(ids[i]).then(neg => {
+                negocios.push(neg);
+            })
+
+        }catch(err){
+            console.log("ERRO! " + err);
+        }
+        }
+        return negocios
+    }else{
+        return negocioIn
+    }
+    
+}
+
+export  const getNegociosUsuario  = async (id) =>  {
     var negocios = [];
     try {
         
@@ -96,6 +128,7 @@ export  const getNegociosUsuario = async (id) =>  {
                     rua: documentSnapshot.data().rua,
                     numero: documentSnapshot.data().numero,
                     cep: documentSnapshot.data().cep,
+                    publico: documentSnapshot.data().publico,
                     descricao: documentSnapshot.data().descricao,
                     tipo: documentSnapshot.data().tipo,
                     nome: documentSnapshot.data().nome,
@@ -112,7 +145,7 @@ export  const getNegociosUsuario = async (id) =>  {
             return negocios
     })
     }catch(err){
-                console.log("ERRO!" + err);
+                console.log("ERRO! " + err);
             }
    
     return negocios
@@ -128,5 +161,11 @@ export function setNegocio(neg){
 export function editNegocio(neg, id){
     negocio.doc(id).update(neg).then(() => {
         console.log("Negócio Editado")
+    })
+}
+
+export function deleteNegocio(id){
+    negocio.doc(id).delete().then(() => {
+        console.log("Negocio deletado");
     })
 }

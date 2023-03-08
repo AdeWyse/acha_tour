@@ -41,7 +41,7 @@ export default function Conta({navigation, route}){
    }
 
    const GoMinhaLista = () => {
-    
+        navigation.navigate('Wishlist');
    }
 
     return (

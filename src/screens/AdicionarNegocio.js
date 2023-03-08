@@ -72,13 +72,14 @@ export default function AdicionarNegocio({navigation, route}){
                     nome: data.nome,
                     tipo: data.tipo,
                     descricao: data.descricao,
+                    publico: data.publico,
                     social: data.link,
                     telefone: telefoneLimpo,
                     location: new firebase.firestore.GeoPoint(Number(loc.lat), Number(loc.lng)),
                     rua: data.rua,
-                    numero: datanumero,
+                    numero: data.numero,
                     cep: data.cep,
-                    responsavel: user.id,
+                    responsavel: userId,
                     notaGeral: 5,
                     notaSeguranca: 5,
                     notaPreco: 5,
@@ -117,6 +118,16 @@ export default function AdicionarNegocio({navigation, route}){
                             <View>
                                 <Text style={styles.prompts}>Tipo</Text>
                         <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.tipo && styles.erroBorder]} placeholder="Ex. Restaurante, Bar, Loja de Roupas" value={value} onChangeText={onChange}></TextInput>
+                            </View>
+                        )}
+                    />
+                    <Controller 
+                        control={control}
+                        name="publico"
+                        render={({ field: {onChange, value}}) => (
+                            <View>
+                                <Text style={styles.prompts}>Público</Text>
+                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.tipo && styles.erroBorder]} placeholder="Ex. LGBTQIA+, Mulheres Lésbicas, Pessoas Trans, Homens Gays" value={value} onChangeText={onChange}></TextInput>
                             </View>
                         )}
                     />

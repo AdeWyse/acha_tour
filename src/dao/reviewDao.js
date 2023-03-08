@@ -2,6 +2,7 @@ import { negocio } from "../config/firebase";
 import { getNegocios } from "./negocioDao";
 
 export function setReview(id, review){
+    console.log(review)
     negocio.doc(id).collection('Review').add(review).then(() => {
         console.log("Review Adicionada")
     })

@@ -87,6 +87,7 @@ export default function Busca({navigation, route}){
             <View style={styles.lugar} >
             <View  style={styles.lugarTop}>
                 <Text style={styles.lugarTitulo}>{lugar.nome}</Text>
+                <Text style={styles.lugarTipo}>{lugar.publico}</Text>
                 <Text style={styles.lugarTipo}>{lugar.tipo}</Text>
             </View>
             <View style={styles.lugarNotas}>

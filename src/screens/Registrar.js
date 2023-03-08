@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {View, Text, StyleSheet, Dimensions, TextInput, Pressable, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, TextInput, Pressable, ScrollView, Image} from 'react-native';
 import{colors, parameters} from "../global/styles";
 import {useForm, Controller} from "react-hook-form";
 import * as yup from 'yup';
@@ -27,14 +27,13 @@ export default function Registrar({navigation, route}){
         var email = data.email;
         var senha = data.senha;
         auth().createUserWithEmailAndPassword(email, senha).then((userCredential) => {
+            console.log(userCredential.user.uid);
             usuarioToCreate = {
-                id: userCredential.id,
+                uid: userCredential.user.uid,
                 nome: data.nome,
-                foto: ''
+                foto: 'https://firebasestorage.googleapis.com/v0/b/achatour.appspot.com/o/DefaultAvatar.png?alt=media&token=0b522c0b-4997-4563-8381-892d04fc651d'
             }
-            navigation.navigate('Feed');
-
-            
+            navigation.navigate('Busca');
             setUser(usuarioToCreate);
         }).catch((error) => {
             const errorCode = error.code;
@@ -47,8 +46,11 @@ export default function Registrar({navigation, route}){
     return (
         <View>
             <ScrollView style={styles.container}>
+                <View>
+                    <Image style={styles.titulo} source={"../img/AchaTourLogo.png"}></Image>
+                    <Text style={styles.slogan}>Ache o espaço do seu tour</Text>
+                </View>
                     <Text style={styles.welcomeText}>Cadastre-se</Text>
-
                     <Controller 
                         control={control}
                         name="nome"
@@ -112,9 +114,27 @@ const styles = StyleSheet.create({
         paddingHorizontal: '5%'
     },
 
-    welcomeText: {
+    titulo: {
         color: colors.purple,
         fontSize: 35,
+        fontWeight: "bold",
+        textAlign: 'center',
+        marginVertical: 2,
+        width: 50,
+        height: 50
+    },
+
+    slogan: {
+        color: colors.purple,
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: 'center',
+        marginVertical: 2
+    },
+
+    welcomeText: {
+        color: colors.purple,
+        fontSize: 20,
         fontWeight: "bold",
         textAlign: 'center',
         marginVertical: 20

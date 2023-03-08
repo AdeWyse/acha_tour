@@ -23,9 +23,8 @@ export default function Entrar({navigation, route}){
         setLogin(true);
 
         auth().signInWithEmailAndPassword(email, senha).then((userCredential) => {
-            navigation.navigate('Feed');
+            navigation.navigate('Busca');
 
-            //Create user on DB
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -39,6 +38,10 @@ export default function Entrar({navigation, route}){
     return (
         <View>
             <View style={styles.container}>
+                <View>
+                    <Text style={styles.titulo}>AchaTour</Text>
+                    <Text style={styles.slogan}>Ache o espaço do seu tour</Text>
+                </View>
                     <Text style={styles.welcomeText}>Bem-vinde</Text>
                     <Controller 
                         control={control}
@@ -79,13 +82,29 @@ const styles = StyleSheet.create({
         justifySelf: 'center',
         backgroundColor: colors.white,
         height: '100%',
-        paddingTop: '50%',
+        paddingTop: '20%',
         paddingHorizontal: '5%'
+    },
+
+    titulo: {
+        color: colors.purple,
+        fontSize: 35,
+        fontWeight: "bold",
+        textAlign: 'center',
+        marginVertical: 2
+    },
+
+    slogan: {
+        color: colors.purple,
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: 'center',
+        marginVertical: 2
     },
 
     welcomeText: {
         color: colors.purple,
-        fontSize: 35,
+        fontSize: 20,
         fontWeight: "bold",
         textAlign: 'center',
         marginVertical: 20

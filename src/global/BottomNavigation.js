@@ -28,10 +28,7 @@ export default function BottomNavigation({navigator}){
 
     return (
         <View style={styles.navigationBar}>
-            <View style={{marginLeft:20}}>
-                <Icon type="material-community" name="home-circle" color={colors.white} size={28}
-                onPress={()=>{navigator.navigate('Feed')}} /><Text style={styles.navigationText}>Feed</Text>
-            </View>
+
             <View style={{marginLeft:20}}>
                 <Icon type="material-community" name="map-search" color={colors.white} size={28}
                 onPress={()=>{navigator.navigate('Busca')}} /><Text style={styles.navigationText}>Busca</Text>
@@ -42,7 +39,7 @@ export default function BottomNavigation({navigator}){
             </View>
             <View style={{marginLeft:20}}>
                 <Icon type="material-community" name="help-circle-outline" color={colors.white} size={28}
-                onPress={()=>{}} /><Text style={styles.navigationText}>Ajuda</Text>
+                onPress={()=>{navigator.navigate('Ajuda')}} /><Text style={styles.navigationText}>Ajuda</Text>
             </View>
             <View style={{marginLeft:20}}>
                 <Icon type="material-community" name="door" color={colors.white} size={28}

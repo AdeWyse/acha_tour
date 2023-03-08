@@ -71,8 +71,6 @@ export default function EditarReview({navigation, route}){
         <View>
             <ScrollView style={styles.container}>
                     <Text style={styles.welcomeText}>Editar Review</Text>
-
-
                     <Controller 
                         control={control}
                         name="notaGeral"

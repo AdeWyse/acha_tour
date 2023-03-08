@@ -120,6 +120,16 @@ export default function EditarNegocio({navigation, route}){
                     />
                     <Controller 
                         control={control}
+                        name="publico"
+                        render={({ field: {onChange, value}}) => (
+                            <View>
+                                <Text style={styles.prompts}>Público</Text>
+                        <TextInput multiline={true} numberOfLines={5} style={[styles.inputs, errors.tipo && styles.erroBorder]} placeholder="Ex. LGBTQIA+, Mulheres Lésbicas, Pessoas Trans, Homens Gays" value={value} onChangeText={onChange}></TextInput>
+                            </View>
+                        )}
+                    />
+                    <Controller 
+                        control={control}
                         name="descricao"
                         render={({ field: {onChange, value}}) => (
                             <View>

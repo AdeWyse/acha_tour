@@ -8,6 +8,7 @@ import{yupResolver} from '@hookform/resolvers/yup';
 import { firebase } from "@react-native-firebase/auth";
 import { Slider } from "@rneui/base";
 import { setReview } from "../dao/reviewDao";
+import { getUser } from "../dao/usuarioDao";
 
 const schema = yup.object({
     notaGeral: yup.number().required("Deixe uma nota geral"),
@@ -46,7 +47,6 @@ export default function AdicionarReview({navigation, route}){
                 unmounted = true;
             }
     }, []);
-
     function handleReview(data){
  
         try{
@@ -59,9 +59,8 @@ export default function AdicionarReview({navigation, route}){
                 autor: userId,
                 nome: user?.nome
             }
-            
             setReview(route.params.id, review)
-                //navigation.navigate('Negocio', route.params.id);
+            navigation.navigate('Negocio', route.params.id);
         }catch(err){
             console.log("ERRO! AddReview " + err);
         }
